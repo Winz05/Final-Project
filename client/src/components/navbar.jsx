@@ -26,13 +26,12 @@ export default function NavigationBar() {
 				</button>
 			</div>
 			{localStorage.getItem("token") ? (
-				<Link
-					to={"/profile"}
-					className="col-span-2 flex items-center justify-end space-x-4"
-				>
-					<CgProfile className="text-2xl" />
-					<h2 className=" font-tokpedFont font-semibold">Veanus Nathan</h2>
-				</Link>
+				<div className="col-span-2 flex items-center justify-end space-x-4">
+					<Link to={"/profile"} className="flex space-x-3">
+						<CgProfile className="text-2xl" />
+						<h2 className=" font-tokpedFont font-semibold">Veanus Nathan</h2>
+					</Link>
+				</div>
 			) : (
 				<div className="col-span-2 grid grid-cols-2 gap-4">
 					<button className="border-[2px] rounded-lg px-2 py-1">
