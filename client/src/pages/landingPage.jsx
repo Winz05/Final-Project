@@ -53,11 +53,18 @@ export default function LandingPage() {
 					? category.map((value, index) => {
 							return (
 								<button key={index}>
-									<img
-										src={value.img}
-										alt={value.name}
-										className="h-32 w-32 border-black border-[2px] rounded-full"
-									/>
+									<a
+										href={`/category/category=${value.id}&branch=${
+											product ? product[0].branch.id : ""
+										}`}
+									>
+										<img
+											src={value.img}
+											alt={value.name}
+											className="h-32 w-32 border-black border-[2px] rounded-full"
+										/>
+										<p className="font-semibold font-mandalaFont text-xl">{value.name}</p>
+									</a>
 								</button>
 							);
 					  })

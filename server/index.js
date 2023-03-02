@@ -24,10 +24,12 @@ app.use("/Public", express.static("Public"));
 const { productRouter } = require("./router");
 const { userRouter } = require("./router");
 const { adminRouter } = require("./router");
+const { cartRouter } = require("./router");
 
 app.use("/product", productRouter);
 app.use("/user", userRouter);
 app.use("/admin", adminRouter);
+app.use("/cart", cartRouter);
 
 // ===========================
 // NOTE : Add your routes here
