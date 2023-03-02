@@ -208,9 +208,7 @@ export default function Profile() {
 											className={`text-4xl rounded-full ${
 												profile.gender === "Female" ? "bg-blue-200" : null
 											}`}
-											onClick={() =>
-												setprofile({ ...profile, gender: "Female" })
-											}
+											onClick={() => setprofile({ ...profile, gender: "Female" })}
 										/>
 										<p>Female</p>
 									</div>
@@ -225,8 +223,7 @@ export default function Profile() {
 								defaultValue={profile.email}
 								{...register("email", {
 									pattern: {
-										value:
-											/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+										value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
 										message: "Please input a valid email",
 									},
 								})}
