@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
-import tokonglomerat from "../assets/edit_register_new.png";
+import tokonglomerat from "../support/assets/edit_register_new.png";
 import LoadingSpin from "react-loading-spin";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-// import { API } from "../support/service/restAPI";
+
 // import { onSubmit } from "../support/service/register";
 
 function Register() {
@@ -27,9 +27,7 @@ function Register() {
 		try {
 			setdisable(true);
 
-			// let {data} = await API.post("/user/register", {})
-
-			let { data } = await axios.post("http://localhost:5000/user/register", {
+			let { data } = await axios.post("http://localhost:8000/user/register", {
 				name: inputName.current.value,
 				email: inputEmail.current.value,
 				password: inputPassword.current.value,
@@ -42,7 +40,7 @@ function Register() {
 			inputPhoneNumber.current.value = "";
 			setTimeout(() => {
 				Navigate("/login");
-			},3000);
+			}, 3000);
 		} catch (error) {
 			toast.error(error.response.data.message);
 		} finally {
@@ -63,9 +61,7 @@ function Register() {
 	let onValidateEmail = (value) => {
 		if (value === "") {
 			seterrEmail("Please input your email");
-		} else if (
-			!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i.test(value)
-		) {
+		} else if (!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i.test(value)) {
 			seterrEmail("Format Email Invalid");
 		} else {
 			seterrEmail("");
@@ -76,11 +72,7 @@ function Register() {
 			seterrPassword("Please input your password");
 		} else if (value.length < 8) {
 			seterrPassword("Password less than 8 character, please input more");
-		} else if (
-			!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/.test( 
-				value
-			)
-		) {
+		} else if (!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/.test(value)) {
 			seterrPassword("Password must contain number and capital");
 		} else {
 			seterrPassword("");
@@ -103,9 +95,7 @@ function Register() {
 	return (
 		<div className=" max-h-screen overflow-hidden ">
 			<div className=" mt-[20px] mb-[25px] flex content-center justify-center">
-				<h1 className=" font-bold text-4xl font-mandalaFont text-red-700 ">
-					tokonglomerat
-				</h1>
+				<h1 className=" font-bold text-4xl font-mandalaFont text-red-700 ">tokonglomerat</h1>
 			</div>
 			<div className="  flex content-center justify-center max-w-sm h-screen xl:max-w-screen-2xl mx-auto">
 				<div className=" hidden xl:flex-row xl:block">
@@ -119,8 +109,7 @@ function Register() {
 						Easy Buying and Selling Only at Tokonglomerat
 					</p>
 					<p className=" font-tokpedFont ml-[15px] mt-[13px] text-[#6d7588] text-[13px]">
-						Join and feel the convenience of making transactions at
-						Tokonglomerat
+						Join and feel the convenience of making transactions at Tokonglomerat
 					</p>
 				</div>
 
@@ -134,10 +123,7 @@ function Register() {
 					</h1>
 
 					<div className="flex flex-col items-start mt-[32px] mb-5 gap-y-3">
-						<label
-							htmlFor="name"
-							className="text-sm font-medium cursor-pointer"
-						>
+						<label htmlFor="name" className="text-sm font-medium cursor-pointer">
 							Name
 						</label>
 						<input
@@ -153,10 +139,7 @@ function Register() {
 						</div>
 					</div>
 					<div className="flex flex-col items-start mb-5 gap-y-3">
-						<label
-							htmlFor="email"
-							className="text-sm font-medium cursor-pointer"
-						>
+						<label htmlFor="email" className="text-sm font-medium cursor-pointer">
 							Email
 						</label>
 						<input
@@ -172,10 +155,7 @@ function Register() {
 						</div>
 					</div>
 					<div className="flex flex-col relative items-start mb-5 gap-y-3">
-						<label
-							htmlFor="password"
-							className="text-sm font-medium cursor-pointer"
-						>
+						<label htmlFor="password" className="text-sm font-medium cursor-pointer">
 							Password
 						</label>
 
@@ -192,25 +172,16 @@ function Register() {
 						</div>
 						<div className=" text-2xl absolute right-5 top-12">
 							{showPassword ? (
-								<AiFillEye
-									onClick={() =>
-										setshowPassword((showPassword) => !showPassword)
-									}
-								/>
+								<AiFillEye onClick={() => setshowPassword((showPassword) => !showPassword)} />
 							) : (
 								<AiFillEyeInvisible
-									onClick={() =>
-										setshowPassword((showPassword) => !showPassword)
-									}
+									onClick={() => setshowPassword((showPassword) => !showPassword)}
 								/>
 							)}
 						</div>
 					</div>
 					<div className="flex flex-col items-start mb-5 gap-y-3">
-						<label
-							htmlFor="phone_number"
-							className="text-sm font-medium cursor-pointer"
-						>
+						<label htmlFor="phone_number" className="text-sm font-medium cursor-pointer">
 							Phone Number
 						</label>
 						<input
@@ -238,11 +209,7 @@ function Register() {
 						onClick={() => onSubmit()}
 					>
 						{disable ? (
-							<LoadingSpin
-								size={"30px"}
-								primaryColor={"red"}
-								secondaryColor={"gray"}
-							/>
+							<LoadingSpin size={"30px"} primaryColor={"red"} secondaryColor={"gray"} />
 						) : (
 							"Create an account"
 						)}

@@ -1,20 +1,82 @@
-require("dotenv").config();
+require("dotenv/config");
 const express = require("express");
-const app = express();
 const cors = require("cors");
-const PORT = 5000;
+const { join } = require("path");
+
+const PORT = process.env.PORT || 8000;
+const app = express();
+// app.use(
+// 	cors({
+// 		origin: [
+// 			process.env.WHITELISTED_DOMAIN &&
+// 				process.env.WHITELISTED_DOMAIN.split(","),
+// 		],
+// 	})
+// );
+// console.log(process.env.WHITELISTED_DOMAIN);
+app.use(cors());
 
 app.use(express.json());
-app.use(cors());
+
+//#region API ROUTES
 app.use("/Public", express.static("Public"));
-app.get('/', (req,res) => {
-    res.status(201).send(`<h1>Welcome to Home Page API</h1>`)
-})
 
-// Import Router
-const {userRouter} = require('./router')
-app.use('/user', userRouter)
+const { productRouter } = require("./router");
+const { userRouter } = require("./router");
 
+app.use("/product", productRouter);
+app.use("/user", userRouter);
+// ===========================
+// NOTE : Add your routes here
 
+app.get("/api", (req, res) => {
+	res.send(`Hello, this is my API`);
+});
 
-app.listen(PORT, () => console.log(`Conected to localhost ${PORT}`));
+app.get("/api/greetings", (req, res, next) => {
+	res.status(200).json({
+		message: "Hello, Student !",
+	});
+});
+
+// ===========================
+
+// not found
+app.use((req, res, next) => {
+	if (req.path.includes("/api/")) {
+		res.status(404).send("Not found !");
+	} else {
+		next();
+	}
+});
+
+// error
+app.use((err, req, res, next) => {
+	if (req.path.includes("/api/")) {
+		console.error("Error : ", err.stack);
+		res.status(500).send("Error !");
+	} else {
+		next();
+	}
+});
+
+//#endregion
+
+//#region CLIENT
+const clientPath = "../../client/build";
+app.use(express.static(join(__dirname, clientPath)));
+
+// Serve the HTML page
+app.get("*", (req, res) => {
+	res.sendFile(join(__dirname, clientPath, "index.html"));
+});
+
+//#endregion
+
+app.listen(PORT, (err) => {
+	if (err) {
+		console.log(`ERROR: ${err}`);
+	} else {
+		console.log(`APP RUNNING at ${PORT} ✅`);
+	}
+});

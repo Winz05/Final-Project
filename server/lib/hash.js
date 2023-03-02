@@ -1,14 +1,11 @@
-require("dotenv").config()
+require("dotenv").config();
 const bcrypt = require("bcrypt");
 const saltRounds = parseInt(process.env.SALTROUNDS);
-// const saltRounds = 10
-
-
 
 module.exports = {
 	hashPassword: async (password) => {
 		try {
-			return await bcrypt.hash(password, saltRounds );
+			return await bcrypt.hash(password, saltRounds);
 		} catch (error) {
 			return null;
 		}
