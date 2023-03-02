@@ -1,27 +1,53 @@
-const { sequelize } = require("../sequelize/models");
-
-const { Op } = require("sequelize");
-
-// Import Models
-const db = require("../sequelize/models/index");
-
-// Import Hashing
-const { hashPassword, matchPassword } = require("../lib/hash");
-
-// Import jwt
-const { createToken } = require("../lib/jwt");
-
-// Import Filesystem
-const fs = require("fs").promises;
-
+const db = require("../sequelize/models");
+const HTTPStatus = require("../helper/HTTPStatus");
+// Import Hashing 
+const {hashPassword, matchPassword} = require('../lib/hash')
+// Import JWT
+const {createToken} = require('../lib/jwt')
+// Import FileSystem
+const fs = require("fs").promises
 // Import Transporter
-const transporter = require("../helper/transporter");
-
-// Import handlebars
-const handlebars = require("handlebars");
-
+const transporter = require('../helper/transporter')
+// Import Handlebars
+const handlebars = require('handlebars')
 
 module.exports = {
+	getUser: async (req, res) => {
+		const { token } = req.headers;
+		try {
+			const data = await db.user.findOne({
+				where: { uid: token },
+			});
+			const httpStatus = new HTTPStatus(res, data).success("Get user profile");
+			httpStatus.send();
+		} catch (error) {
+			res.status(400).send({
+				isError: false,
+				message: error.message,
+				data: error,
+			});
+		}
+	},
+	updateUser: async (req, res) => {
+		const { token } = req.headers;
+		const { name, birthdate, gender, email, phone_number } = req.body;
+		try {
+			const data = await db.user.update(
+				{ name, birthdate, gender, email, phone_number },
+				{
+					where: { uid: token },
+				}
+			);
+			const httpStatus = new HTTPStatus(res, data).success("Get user profile");
+			httpStatus.send();
+		} catch (error) {
+			res.status(400).send({
+				isError: false,
+				message: error.message,
+				data: error,
+			});
+		}
+	},
 	register: async (req, res) => {
 		try {
 			let { name, email, password, phone_number } = req.body;
@@ -157,7 +183,7 @@ module.exports = {
 			res.status(201).send({
 				isError: false,
 				message: "Token Valid",
-				data: req.uid.name,
+				data: req.uid,
 			});
 		} catch (error) {
 			res.status(500).send({
@@ -195,11 +221,12 @@ module.exports = {
 	resetPassword: async (req, res) => {
 		try {
 			let { uid, password, confPassword } = req.body;
-			if(!password) return res.status(404).send({
-				isError: true,
-				message: 'Please Input Your Password',
-				data: null
-			})
+			if (!password)
+				return res.status(404).send({
+					isError: true,
+					message: "Please Input Your Password",
+					data: null,
+				});
 
 			if (password !== confPassword)
 				return res.status(404).send({
@@ -235,10 +262,11 @@ module.exports = {
 		try {
 			let { email } = req.body;
 
-			if(!email) return res.status(404).send({
-				isError: true,
-				message: 'Please Input Your Email'
-			})
+			if (!email)
+				return res.status(404).send({
+					isError: true,
+					message: "Please Input Your Email",
+				});
 
 			let findEmail = await db.user.findOne({
 				where: {

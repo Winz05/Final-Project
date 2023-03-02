@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import anjing from '../assets/anjing.jpg';
+import anjing from "../support/assets/carousel/anjing.jpg";
 import axios from "axios";
 import { useEffect } from "react";
 
@@ -8,13 +8,11 @@ export default function LandingPage() {
 	const [product, setproduct] = useState();
 	const [page, setpage] = useState();
 	const [selectedpage, setselectedpage] = useState();
-
 	const [category, setcategory] = useState();
+
 	const getCategory = async () => {
 		try {
-			const { data } = await axios.get(
-				"http://localhost:5000/product/category"
-			);
+			const { data } = await axios.get("http://localhost:8000/product/category");
 			setcategory(data.data);
 		} catch (error) {
 			console.log(error);
@@ -22,9 +20,7 @@ export default function LandingPage() {
 	};
 	const getTotalPage = async (branch) => {
 		try {
-			const { data } = await axios.get(
-				`http://localhost:5000/product/totalPage?branch=${branch}`
-			);
+			const { data } = await axios.get(`http://localhost:8000/product/totalPage?branch=${branch}`);
 			const totalPage = [];
 			for (let i = 1; i <= data.data / 10; i++) {
 				totalPage.push(i);
@@ -34,9 +30,7 @@ export default function LandingPage() {
 	};
 	const getAllProduct = async (page) => {
 		try {
-			const { data } = await axios.get(
-				`http://localhost:5000/product?page=${page}`
-			);
+			const { data } = await axios.get(`http://localhost:8000/product?page=${page}`);
 			setproduct(data.data);
 			setselectedpage(page);
 		} catch (error) {
@@ -77,11 +71,7 @@ export default function LandingPage() {
 									key={index}
 									className="flex flex-col shadow-md justify-between w-full max-w-sms h-96 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700"
 								>
-									<img
-										className="p-8 rounded-t-lg"
-										src={value.product.img}
-										alt="product"
-									/>
+									<img className="p-8 rounded-t-lg" src={value.product.img} alt="product" />
 									<div className="px-5 pb-5">
 										<h5 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
 											{value.product.name}

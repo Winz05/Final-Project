@@ -12,8 +12,7 @@ module.exports = {
 			});
 		}
 		try {
-			const validateTokenResult = validateToken(token)
-			req.uid = validateTokenResult
+			req.uid = validateToken(token);
 
 			next()
 		} catch (error) {
