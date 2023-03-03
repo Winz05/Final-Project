@@ -3,8 +3,9 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 import tokonglomerat from "../support/assets/edit_register_new.png";
 import LoadingSpin from "react-loading-spin";
-import axios from "axios";
+// import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import REST_API from "../support/services/RESTApiService";
 
 // import { onSubmit } from "../support/service/register";
 
@@ -26,13 +27,17 @@ function Register() {
 	let onSubmit = async () => {
 		try {
 			setdisable(true);
-
-			let { data } = await axios.post("http://localhost:8000/user/register", {
-				name: inputName.current.value,
-				email: inputEmail.current.value,
-				password: inputPassword.current.value,
-				phone_number: inputPhoneNumber.current.value,
+			const { data } = await REST_API({
+				url: "user/register",
+				method: "POST",
+				data: {
+					name: inputName.current.value,
+					email: inputEmail.current.value,
+					password: inputPassword.current.value,
+					phone_number: inputPhoneNumber.current.value,
+				},
 			});
+
 			toast.success(data.message);
 			inputName.current.value = "";
 			inputEmail.current.value = "";
