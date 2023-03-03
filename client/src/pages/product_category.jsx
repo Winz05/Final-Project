@@ -7,6 +7,7 @@ import { SlClose } from "react-icons/sl";
 import LoadingSpin from "react-loading-spin";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
+import REST_API from "../support/services/RESTApiService";
 
 export default function ProductCategory() {
 	const params = useParams();
@@ -22,11 +23,12 @@ export default function ProductCategory() {
 
 	let onGetData = async (page) => {
 		try {
-			const { data } = await axios.get(
-				`http://localhost:8000/product/branch_product?category=${params.product
+			const { data } = await REST_API({
+				url: `product/branch_product?category=${params.product
 					.split("&")[0]
-					.slice(-1)}&branch=${params.product.split("&")[1].slice(-1)}&page=${page}`
-			);
+					.slice(-1)}&branch=${params.product.split("&")[1].slice(-1)}&page=${page}`,
+				method: "GET",
+			});
 			console.log(data.data);
 			setproduct(data.data);
 			setselectedpage(page);
@@ -37,11 +39,12 @@ export default function ProductCategory() {
 
 	let onGetPage = async () => {
 		try {
-			const { data } = await axios.get(
-				`http://localhost:8000/product/pageCategory?branch=${params.product
+			const { data } = await REST_API({
+				url: `product/pageCategory?branch=${params.product
 					.split("&")[1]
-					.slice(-1)}&category=${params.product.split("&")[0].slice(-1)}`
-			);
+					.slice(-1)}&category=${params.product.split("&")[0].slice(-1)}`,
+				method: "GET",
+			});
 
 			const totalPage = [];
 			for (let i = 1; i <= data.data / 10; i++) {
@@ -55,9 +58,10 @@ export default function ProductCategory() {
 		console.log(branch);
 		console.log(products);
 		try {
-			const { data } = await axios.get(
-				`http://localhost:8000/product/detail?branch=${branch}&product=${products}`
-			);
+			const { data } = await REST_API({
+				url: `product/detail?branch=${branch}&product=${products}`,
+				method: "GET",
+			});
 			console.log(data.data[0].product);
 			console.log(data.data[0].branch);
 			console.log(data.data[0]);
@@ -71,11 +75,10 @@ export default function ProductCategory() {
 
 	let onGetUnit = async () => {
 		try {
-			const { data } = await axios.get(
-				`http://localhost:8000/product/getallproduct?category=${params.product
-					.split("&")[0]
-					.slice(-1)}`
-			);
+			const { data } = await REST_API({
+				url: `product/getallproduct?category=${params.product.split("&")[0].slice(-1)}`,
+				method: "GET",
+			});
 			console.log(data.data[0]);
 			setunit(data.data[0]);
 		} catch (error) {
@@ -86,11 +89,15 @@ export default function ProductCategory() {
 	let onSubmit = async () => {
 		try {
 			setdisable(true);
-			const { data } = await axios.post("http://localhost:8000/cart/add", {
-				qty: quantity,
-				branch_id: detail.branch_id,
-				user_id: 4,
-				product_id: detail.product_id,
+			const { data } = await REST_API({
+				url: "cart/add",
+				method: "POST",
+				data: {
+					qty: quantity,
+					branch_id: detail.branch_id,
+					user_id: 4,
+					product_id: detail.product_id,
+				},
 			});
 			toast.success(data.message);
 		} catch (error) {
@@ -101,7 +108,10 @@ export default function ProductCategory() {
 	};
 
 	const getCategory = async () => {
-		const { data } = await axios.get("http://localhost:8000/product/category");
+		const { data } = await REST_API({
+			url: "product/category",
+			method: "GET",
+		});
 		setcategory(data.data);
 	};
 
@@ -288,7 +298,7 @@ export default function ProductCategory() {
 							/>
 							<button
 								value={"+"}
-								disabled={quantity >= (detail ? detail.stock : null)  ? true : false}
+								disabled={quantity >= (detail ? detail.stock : null) ? true : false}
 								onClick={() => setquantity(quantity + 1)}
 								className=" text-green-500 font-bold"
 							>

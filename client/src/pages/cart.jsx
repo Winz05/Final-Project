@@ -4,14 +4,22 @@ import { RxMinusCircled } from "react-icons/rx";
 import { RxPlusCircled } from "react-icons/rx";
 import { useEffect, useState } from "react";
 // import { API } from "../support/services/restAPI";
-import axios from 'axios'
+// import axios from 'axios'
+import REST_API from "../support/services/RESTApiService";
 
 export default function Cart() {
 	const [data, setdata] = useState();
 
 	let onGetCart = async () => {
 		try {
-			let { data } = await axios.post("http://localhost:8000/cart/get", { id: 4, branch_id: 1 });
+			let { data } = await REST_API({
+				url: "cart/get",
+				method: "POST",
+				data: {
+					id: 4,
+					branch_id: 1,
+				},
+			});
 			console.log(data.data);
 			setdata(data.data);
 		} catch (error) {
@@ -21,11 +29,26 @@ export default function Cart() {
 	let updateQuantity = async (value, operation, quantity) => {
 		try {
 			if (operation === "+") {
-				const data = await axios.post("http://localhost:8000/cart/inc", { id: value, quantity: quantity });
+				const { data } = await REST_API({
+					url: "cart/inc",
+					method: "POST",
+					data: {
+						id: value,
+						quantity: quantity,
+					},
+				});
+
 				console.log(data);
 				onGetCart();
 			} else if (operation === "-") {
-				const data = await axios.post("http://localhost:8000/cart/dec", { id: value, quantity: quantity });
+				const { data } = await REST_API({
+					url: "cart/dec",
+					method: "POST",
+					data: {
+						id: value,
+						quantity: quantity,
+					},
+				});
 				console.log(data);
 				onGetCart();
 			}
@@ -60,7 +83,11 @@ export default function Cart() {
 												</div>
 												<div className=" h-[156px] flex flex-row pt-5 border-b">
 													<div className=" h-[135px] w-[364px] flex ">
-														<img alt="product_image" className=" h-[60px] w-[60px]" src={value.product.img} />
+														<img
+															alt="product_image"
+															className=" h-[60px] w-[60px]"
+															src={value.product.img}
+														/>
 														<div className=" h-[93px] my-[7px] ">
 															<p className=" pl-[15px] font-tokpedFont text-[14px]">
 																{value.product.name}

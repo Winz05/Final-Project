@@ -1,8 +1,9 @@
-import axios from "axios";
+// import axios from "axios";
 import { useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import tokonglomerat from "../support/assets/edit_register_new.png";
+import REST_API from "../support/services/RESTApiService";
 
 function Activation() {
 	const Navigate = useNavigate();
@@ -15,8 +16,12 @@ function Activation() {
 
 	let onSubmit = async () => {
 		try {
-			let { data } = await axios.patch(`http://localhost:8000/user/activation/uid`, {
-				uid: location.pathname.slice(12),
+			let { data } = await REST_API({
+				url: "user/activation/uid",
+				method: "PATCH",
+				data: {
+					uid: location.pathname.slice(12),
+				},
 			});
 
 			setTimeout(() => {

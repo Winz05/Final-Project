@@ -4,7 +4,8 @@ import tokonglomerat from "../support/assets/new_login.png";
 import { toast, Toaster } from "react-hot-toast";
 import LoadingSpin from "react-loading-spin";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import REST_API from "../support/services/RESTApiService";
 
 function Login() {
 	const [showPassword, setshowPassword] = useState(false);
@@ -21,11 +22,15 @@ function Login() {
 	let onLogin = async () => {
 		try {
 			setdisable(true);
-
-			let { data } = await axios.post("http://localhost:8000/user/login", {
-				email: email.current.value,
-				password: password.current.value,
+			const { data } = await REST_API({
+				url: "user/login",
+				method: "POST",
+				data: {
+					email: email.current.value,
+					password: password.current.value,
+				},
 			});
+
 			localStorage.setItem("token", `${data.data.token}`);
 			setname(data.data.name);
 			toast.success(data);
