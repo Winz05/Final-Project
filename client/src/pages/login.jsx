@@ -6,12 +6,12 @@ import LoadingSpin from "react-loading-spin";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function Login(props) {
+function Login() {
 	const [showPassword, setshowPassword] = useState(false);
 	const [errEmail, seterrEmail] = useState();
 	const [errPass, seterrPass] = useState();
 	const [disable, setdisable] = useState();
-	// const [name, setname] = useState();
+	const [name, setname] = useState();
 
 	const email = useRef();
 	const password = useRef();
@@ -27,7 +27,7 @@ function Login(props) {
 				password: password.current.value,
 			});
 			localStorage.setItem("token", `${data.data.token}`);
-			// setname(data.data.name);
+			setname(data.data.name);
 			toast.success(data);
 			email.current.value = "";
 			password.current.value = "";
