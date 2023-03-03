@@ -1,11 +1,39 @@
-const { where } = require("sequelize");
 const db = require("../sequelize/models");
+const { Op } = require("sequelize");
 
 module.exports = {
 	addToCart: async (req, res) => {
 		const { qty, branch_id, user_id, product_id } = req.body;
 		try {
-			const data = await db.cart.create({ qty, branch_id, user_id, product_id });
+			const cart = await db.cart.findAll({
+				where: {
+					product_id: product_id,
+				},
+			});
+
+			if (cart.length > 0) {
+				const branch = await db.branch_product.findOne({
+					where: {
+						[Op.and]: [{ branch_id: branch_id }, { product_id: product_id }],
+					},
+				});
+
+				let updateQty = cart[0].dataValues.qty + qty;
+				if (branch.dataValues.stock < updateQty || branch.dataValues.stock < qty) {
+					throw { message: "Quantity More Than Stock" };
+				}
+				var data = await db.cart.update(
+					{ qty: updateQty },
+					{
+						where: {
+							id: cart[0].dataValues.id,
+						},
+					}
+				);
+			} else {
+				var data = await db.cart.create({ qty, branch_id, user_id, product_id });
+			}
+
 			res.status(201).send({
 				isError: false,
 				message: "Add To Cart Success",

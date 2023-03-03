@@ -1,4 +1,5 @@
 const db = require("../sequelize/models");
+const { Op } = require("sequelize");
 
 module.exports = {
 	getSuggested: async (req, res) => {
@@ -110,7 +111,7 @@ module.exports = {
 		} catch (error) {
 			res.status(404).send({
 				isError: true,
-				message: "Product Detail Not Found",
+				message: error.message,
 				data: error,
 			});
 		}
