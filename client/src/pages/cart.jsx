@@ -60,7 +60,7 @@ export default function Cart() {
 												</div>
 												<div className=" h-[156px] flex flex-row pt-5 border-b">
 													<div className=" h-[135px] w-[364px] flex ">
-														<img className=" h-[60px] w-[60px]" src={value.product.img} />
+														<img alt="product_image" className=" h-[60px] w-[60px]" src={value.product.img} />
 														<div className=" h-[93px] my-[7px] ">
 															<p className=" pl-[15px] font-tokpedFont text-[14px]">
 																{value.product.name}
@@ -112,7 +112,7 @@ export default function Cart() {
 						<p className=" font-semibold text-[14px]">Shopping Summary</p>
 						<div className=" h-fit my-4 flex justify-between">
 							<div>
-								<p className=" text-[14px] ">Total price (2 Products)</p>
+								<p className=" text-[14px] ">Total price ({data ? data.length : null} Products)</p>
 								<p className=" mt-2 text-[14px] ">Discount Product </p>
 							</div>
 							<div>
